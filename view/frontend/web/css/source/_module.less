@@ -1,0 +1,125 @@
+@cc-accent: #1979c3;
+@cc-accent-dark: #147;
+@cc-border: #e6e6e6;
+@cc-card-bg: #fff;
+@cc-error: #e02b27;
+@cc-error-bg: #fae5e5;
+@cc-label: #666;
+@cc-muted: #8c8c8c;
+
+& when (@media-common = true) {
+
+    .currency-converter {
+        margin: 0 auto;
+        max-width: 720px;
+
+        &__card {
+            background: @cc-card-bg;
+            border: 1px solid @cc-border;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, .05);
+            margin-bottom: 24px;
+            padding: 28px;
+        }
+
+        &__controls {
+            align-items: end;
+            display: grid;
+            gap: 16px;
+            grid-template-columns: 1fr auto 1fr;
+        }
+
+        &__label {
+            color: @cc-label;
+            display: block;
+            font-size: 1.1rem;
+            font-weight: @font-weight__semibold;
+            letter-spacing: .04em;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+        }
+
+        &__select {
+            width: 100%;
+        }
+
+        &__swap {
+            background: @cc-accent;
+            border: 0;
+            border-radius: 50%;
+            color: @cc-card-bg;
+            cursor: pointer;
+            font-size: 2rem;
+            height: 46px;
+            line-height: 46px;
+            padding: 0;
+            transition: background .2s ease, transform .3s ease;
+            width: 46px;
+
+            &:hover,
+            &:focus {
+                background: @cc-accent-dark;
+                transform: rotate(180deg);
+            }
+        }
+
+        &__result {
+            font-size: 3.2rem;
+            font-weight: @font-weight__bold;
+            margin-top: 28px;
+            min-height: 3.6rem;
+            text-align: center;
+        }
+
+        &__asof {
+            color: @cc-muted;
+            font-size: 1.2rem;
+            text-align: center;
+        }
+
+        &__message {
+            background: @cc-error-bg;
+            border: 1px solid @cc-error;
+            border-radius: 4px;
+            color: @cc-error;
+            display: none;
+            margin-top: 16px;
+            padding: 10px 14px;
+
+            &._show {
+                display: block;
+            }
+        }
+
+        &__chart-title {
+            font-size: 1.6rem;
+            font-weight: @font-weight__semibold;
+            margin-bottom: 16px;
+        }
+
+        &__chart {
+            height: 320px;
+            position: relative;
+        }
+    }
+}
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
+
+    .currency-converter {
+
+        &__controls {
+            gap: 12px;
+            grid-template-columns: 1fr;
+            justify-items: center;
+        }
+
+        &__field {
+            width: 100%;
+        }
+
+        &__swap {
+            transform: rotate(90deg);
+        }
+    }
+}

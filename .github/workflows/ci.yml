@@ -1,0 +1,99 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+
+jobs:
+  static:
+    name: Static tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          tools: composer:v2
+          coverage: none
+
+      - name: Coding standard (phpcs, Magento2)
+        run: |
+          mkdir -p "${{ runner.temp }}/cs" && cd "${{ runner.temp }}/cs"
+          composer init --no-interaction --name=logicera/cs
+          composer config allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
+          composer require --no-interaction --no-progress magento/magento-coding-standard
+          "${{ runner.temp }}/cs/vendor/bin/phpcs" --standard=Magento2 --severity=5 "$GITHUB_WORKSPACE"
+
+      - name: Modern PHP (Rector dry-run)
+        run: |
+          mkdir -p "${{ runner.temp }}/rector"
+          composer --working-dir="${{ runner.temp }}/rector" require --no-interaction --no-progress "rector/rector:^1.2"
+          cd "$GITHUB_WORKSPACE"
+          "${{ runner.temp }}/rector/vendor/bin/rector" process --dry-run --no-progress-bar
+
+      - name: Secret scan (gitleaks)
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Static analysis (PHPStan)
+        uses: extdn/github-actions-m2/magento-phpstan/8.3@master
+        with:
+          composer_name: logicera/module-currency-converter
+
+      - name: Mess detector (PHPMD)
+        uses: extdn/github-actions-m2/magento-mess-detector@master
+
+  unit:
+    name: Unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          tools: composer:v2
+          coverage: none
+      - name: Install test dependencies (Mage-OS mirror, no auth required)
+        run: |
+          composer config repositories.mageos composer https://repo.mage-os.org/
+          composer require --dev --no-interaction --no-progress --no-plugins \
+            magento/framework magento/module-store "phpunit/phpunit:^9.5"
+      - name: Run unit tests
+        run: vendor/bin/phpunit -c Test/Unit/phpunit.xml
+
+  integration:
+    name: Integration tests
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.4
+        env:
+          MYSQL_ROOT_PASSWORD: root
+        ports:
+          - 3306:3306
+        options: >-
+          --tmpfs /tmp:rw --tmpfs /var/lib/mysql:rw
+          --health-cmd="mysqladmin ping" --health-interval=10s
+          --health-timeout=5s --health-retries=3
+      es:
+        image: docker.io/wardenenv/elasticsearch:8.18
+        ports:
+          - 9200:9200
+        env:
+          discovery.type: single-node
+          xpack.security.enabled: 'false'
+          ES_JAVA_OPTS: '-Xms64m -Xmx512m'
+        options: >-
+          --health-cmd="curl localhost:9200/_cluster/health?wait_for_status=yellow&timeout=60s"
+          --health-interval=10s --health-timeout=5s --health-retries=3
+    steps:
+      - uses: actions/checkout@v4
+      - uses: extdn/github-actions-m2/magento-integration-tests/8.3@master
+        with:
+          module_name: Logicera_CurrencyConverter
+          composer_name: logicera/module-currency-converter
+          magento_version: '2.4.8'

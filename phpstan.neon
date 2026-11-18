@@ -1,0 +1,12 @@
+parameters:
+    level: 6
+    paths:
+        - Api
+        - Controller
+        - Model
+        - ViewModel
+    excludePaths:
+        - Test/*
+    ignoreErrors:
+        # Auto-generated factory (exists only after di:compile); safe to reference.
+        - '#Magento\\Framework\\Controller\\Result\\ForwardFactory#'

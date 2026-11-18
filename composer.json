@@ -1,0 +1,25 @@
+{
+    "name": "logicera/module-currency-converter",
+    "description": "Storefront currency exchange converter powered by the Frankfurter API.",
+    "type": "magento2-module",
+    "version": "1.0.0",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "Saif Ali Rehman",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0",
+        "magento/framework": ">=103.0"
+    },
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Logicera\\CurrencyConverter\\": ""
+        }
+    }
+}

@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!-- Default configuration values for the currency converter. -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <currency_converter>
+            <general>
+                <enabled>1</enabled>
+                <default_from>USD</default_from>
+                <default_to>EUR</default_to>
+                <history_days>30</history_days>
+            </general>
+            <api>
+                <base_url>https://api.frankfurter.dev/v1</base_url>
+                <timeout>10</timeout>
+                <cache_lifetime>3600</cache_lifetime>
+                <rate_limit>60</rate_limit>
+            </api>
+        </currency_converter>
+    </default>
+</config>

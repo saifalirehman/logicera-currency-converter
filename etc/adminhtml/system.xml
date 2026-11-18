@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<!-- Admin store-configuration fields (website/store scope) for the converter. -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="logicera" translate="label" sortOrder="400">
+            <label>Logicera</label>
+        </tab>
+        <section id="currency_converter" translate="label" type="text" sortOrder="10"
+                 showInDefault="1" showInWebsite="1" showInStore="1">
+            <class>separator-top</class>
+            <label>Currency Converter</label>
+            <tab>logicera</tab>
+            <resource>Logicera_CurrencyConverter::config</resource>
+            <group id="general" translate="label" type="text" sortOrder="10"
+                   showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>General</label>
+                <field id="enabled" translate="label" type="select" sortOrder="10"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enable Converter Page</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="default_from" translate="label comment" type="text" sortOrder="20"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Default From Currency</label>
+                    <comment>ISO 4217 code, e.g. USD.</comment>
+                </field>
+                <field id="default_to" translate="label comment" type="text" sortOrder="30"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Default To Currency</label>
+                    <comment>ISO 4217 code, e.g. EUR.</comment>
+                </field>
+                <field id="history_days" translate="label comment" type="text" sortOrder="40"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>History Period (days)</label>
+                    <comment>How far back the historical chart looks.</comment>
+                    <validate>validate-number validate-greater-than-zero</validate>
+                </field>
+            </group>
+            <group id="api" translate="label" type="text" sortOrder="20"
+                   showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Frankfurter API</label>
+                <field id="base_url" translate="label comment" type="text" sortOrder="10"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>API Base URL</label>
+                    <comment>Without a trailing slash, e.g. https://api.frankfurter.dev/v1.</comment>
+                    <validate>required-entry validate-url</validate>
+                </field>
+                <field id="timeout" translate="label comment" type="text" sortOrder="20"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Request Timeout (seconds)</label>
+                    <validate>validate-number validate-greater-than-zero</validate>
+                </field>
+                <field id="cache_lifetime" translate="label comment" type="text" sortOrder="30"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Cache Lifetime (seconds)</label>
+                    <comment>How long API responses are cached. Rates change at most once a day.</comment>
+                    <validate>validate-number</validate>
+                </field>
+                <field id="rate_limit" translate="label comment" type="text" sortOrder="40"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Rate Limit (requests/minute)</label>
+                    <comment>Hard cap on outbound API calls per minute. 0 disables the limit.</comment>
+                    <validate>validate-number</validate>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

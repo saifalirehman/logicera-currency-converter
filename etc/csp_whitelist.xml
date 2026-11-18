@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<!-- Content-Security-Policy whitelist for the Chart.js CDN host. -->
+<csp_whitelist xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Csp:etc/csp_whitelist.xsd">
+    <policies>
+        <policy id="script-src">
+            <values>
+                <value id="chartjs_cdnjs" type="host">https://cdnjs.cloudflare.com</value>
+            </values>
+        </policy>
+    </policies>
+</csp_whitelist>

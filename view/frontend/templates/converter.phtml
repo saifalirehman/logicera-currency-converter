@@ -1,0 +1,44 @@
+<?php
+/** @var \Magento\Framework\View\Element\Template $block */
+/** @var \Magento\Framework\Escaper $escaper */
+
+/** @var \Logicera\CurrencyConverter\ViewModel\Converter $viewModel */
+$viewModel = $block->getViewModel();
+?>
+<div id="logicera-currency-converter"
+     class="currency-converter"
+     data-mage-init="<?= $escaper->escapeHtmlAttr($viewModel->getJsonConfig()) ?>">
+
+    <div class="currency-converter__card">
+        <div class="currency-converter__controls">
+            <div class="currency-converter__field">
+                <label class="currency-converter__label" for="cc-from">
+                    <?= $escaper->escapeHtml(__('From')) ?>
+                </label>
+                <select id="cc-from" class="currency-converter__select" data-role="from"></select>
+            </div>
+
+            <button type="button" class="currency-converter__swap" data-role="swap"
+                    aria-label="<?= $escaper->escapeHtmlAttr(__('Swap currencies')) ?>"
+                    title="<?= $escaper->escapeHtmlAttr(__('Swap currencies')) ?>">&#8644;</button>
+
+            <div class="currency-converter__field">
+                <label class="currency-converter__label" for="cc-to">
+                    <?= $escaper->escapeHtml(__('To')) ?>
+                </label>
+                <select id="cc-to" class="currency-converter__select" data-role="to"></select>
+            </div>
+        </div>
+
+        <div class="currency-converter__result" data-role="rate"></div>
+        <div class="currency-converter__asof" data-role="asof"></div>
+        <div class="currency-converter__message" data-role="message" role="alert" aria-live="assertive"></div>
+    </div>
+
+    <div class="currency-converter__card currency-converter__chart-card">
+        <div class="currency-converter__chart-title"><?= $escaper->escapeHtml(__('Historical trend')) ?></div>
+        <div class="currency-converter__chart">
+            <canvas data-role="chart"></canvas>
+        </div>
+    </div>
+</div>
